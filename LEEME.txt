@@ -1,0 +1,45 @@
+VILLA MERCEDES · WEB ESTÁTICA EN ESPAÑOL, INGLÉS Y FRANCÉS
+==========================================================
+
+VERLA EN LOCAL (VS Code + Live Server)
+1. Descomprime el ZIP.
+2. En VS Code abre la carpeta del proyecto (o directamente "site").
+3. Clic derecho en site/index.html > "Open with Live Server".
+Las rutas son relativas: funciona abras la carpeta que abras.
+
+ANTES DE PUBLICAR (5 minutos)
+1. Abre build.py y rellena CONFIG: SITE_URL con tu dominio definitivo (https://...),
+   WhatsApp, teléfono, email, registro turístico, NRUA, capacidad, horas de entrada
+   y salida, y coordenadas.
+2. Ejecuta en una terminal, dentro de esta carpeta:
+       python3 build.py
+   (Python 3.11 o superior. Para ver en local los datos que faltan, marcados en amarillo:
+       python3 build.py --pendientes)
+3. Sube el CONTENIDO de la carpeta "site" a la raíz del hosting, incluido el archivo
+   oculto ".htaccess" (actívalo en tu cliente FTP si no lo ves).
+4. Sigue la lista de comprobación final del informe (PageSpeed, Search Console y la
+   Prueba de resultados enriquecidos).
+
+QUÉ GENERA build.py
+- 36 páginas: 12 por idioma. Español en la raíz, inglés en /en/, francés en /fr/.
+- robots.txt, sitemap.xml con las tres versiones de cada página, .htaccess (HTTPS,
+  dominio único, compresión, caché, cabeceras de seguridad y redirecciones de las
+  URL .html antiguas), site.webmanifest y 404.html.
+- En la versión publicable no aparece ningún [PENDIENTE]: los bloques sin dato se omiten
+  hasta que lo rellenes. El script lista al final los datos que faltan.
+
+ARCHIVOS
+build.py           Configuración, plantilla común, SEO técnico y archivos de servidor
+contenido.py       Textos de cada página en los tres idiomas
+htaccess.template  Plantilla del .htaccess (el dominio lo pone build.py)
+site/              La web lista para subir
+
+ANIMACIONES (21st.dev, licencia MIT)
+Reescritas en JavaScript sin dependencias, a partir de:
+Aceternity UI: Container Scroll Animation, Hero Parallax, Sticky Scroll Reveal, Carousel,
+  Focus Cards, Text Generate, Tracing Beam, Direction Aware Hover, Lens, Timeline, Card Spotlight.
+Motion Primitives (ibelick): Animated Background, Magnetic, Text Effect, Infinite Slider,
+  Sliding Number, Scroll Progress, Progressive Blur, Morphing Dialog, Border Trail.
+Todas respetan "reducir movimiento" del sistema operativo.
+
+Fuente Inter: SIL Open Font License (site/fonts/LICENSE-Inter-OFL.txt).

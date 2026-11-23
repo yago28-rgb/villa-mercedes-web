@@ -1,0 +1,80 @@
+# ============================================================================
+#  Villa Mercedes · .htaccess (Apache 2.4)
+#  Generado por build.py. Dominio canónico: https://www.TU-DOMINIO.es
+#  Si tu hosting usa Nginx o LiteSpeed sin soporte de .htaccess, pide al
+#  proveedor estas mismas reglas (redirecciones, compresión y caché).
+# ============================================================================
+
+Options -Indexes -MultiViews
+DirectoryIndex index.html
+AddDefaultCharset utf-8
+ErrorDocument 404 /404.html
+
+# ── Tipos MIME ──────────────────────────────────────────────────────────────
+<IfModule mod_mime.c>
+  AddType image/avif .avif
+  AddType image/webp .webp
+  AddType font/woff2 .woff2
+  AddType application/manifest+json .webmanifest
+  AddType image/svg+xml .svg
+</IfModule>
+
+# ── Redirecciones: una sola versión de cada URL ─────────────────────────────
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # 1. HTTP → HTTPS y cualquier otro host (sin www, IP…) → host canónico, en un solo salto
+  RewriteCond %{HTTPS} !=on [OR]
+  RewriteCond %{HTTP_HOST} !^www\.TU-DOMINIO\.es$ [NC]
+  RewriteRule ^ https://www.TU-DOMINIO.es%{REQUEST_URI} [R=301,L,NE]
+
+  # 2. /index.html y /carpeta/index.html → URL limpia
+  RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.html[\s?] [NC]
+  RewriteRule ^(.*/)?index\.html$ /$1 [R=301,L,NE]
+
+  # 3. Rutas de la versión anterior (.html) → URL nueva
+  RewriteRule ^la-casa\.html$ /la-casa/ [R=301,L]
+  RewriteRule ^galeria\.html$ /galeria/ [R=301,L]
+  RewriteRule ^santona\.html$ /que-ver-en-santona/ [R=301,L]
+  RewriteRule ^reservar\.html$ /reservar/ [R=301,L]
+  RewriteRule ^opiniones\.html$ /opiniones/ [R=301,L]
+  RewriteRule ^preguntas\.html$ /preguntas-frecuentes/ [R=301,L]
+  RewriteRule ^contacto\.html$ /contacto/ [R=301,L]
+  RewriteRule ^condiciones-de-reserva\.html$ /condiciones-de-reserva/ [R=301,L]
+  RewriteRule ^legal/aviso-legal\.html$ /aviso-legal/ [R=301,L]
+  RewriteRule ^legal/privacidad\.html$ /privacidad/ [R=301,L]
+  RewriteRule ^legal/cookies\.html$ /cookies/ [R=301,L]
+</IfModule>
+
+# ── Compresión ──────────────────────────────────────────────────────────────
+<IfModule mod_brotli.c>
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/css text/plain text/xml application/xml application/javascript text/javascript application/json application/ld+json application/manifest+json image/svg+xml
+</IfModule>
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/xml application/javascript text/javascript application/json application/ld+json application/manifest+json image/svg+xml
+</IfModule>
+
+# ── Caché ───────────────────────────────────────────────────────────────────
+# CSS y JS llevan ?v=<huella> en cada versión, así que pueden guardarse un año.
+# El HTML se revalida siempre para que los cambios se vean al instante.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|xml|txt|webmanifest)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+  <FilesMatch "\.(css|js|woff2|avif|webp|jpg|jpeg|png|svg|mp4|ico)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # ── Seguridad ─────────────────────────────────────────────────────────────
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+  Header always set Content-Security-Policy "default-src 'self'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; frame-src https://www.openstreetmap.org; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests"
+</IfModule>
+
+# ── No servir archivos internos ─────────────────────────────────────────────
+<FilesMatch "^(\.|build\.py|contenido\.py|htaccess\.template|LEEME\.txt)">
+  Require all denied
+</FilesMatch>
